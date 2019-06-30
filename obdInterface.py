@@ -1,13 +1,25 @@
-# First install python-OBD
-# https://python-obd.readthedocs.io/
+import obd, keyboard
+from obd import OBDStatus 
 
-import obd
+
+#--INSTALL NOTES
+# Install python-OBD    https://python-obd.readthedocs.io/
+# pip3 install obd
+# Install keyboard detection module
+# pip3 install keyboard
+
+# Install Android terminal emulator + keyboard helper
+
+global retry
+global connection
 
 """ 
 Connect to the OBDII adapter through Bluetooth / usb?? 
 """
 def connectOBDII():
+    global connection
     connection = obd.OBD() # auto connect
+    global retry
 
     # # OR
     # connection = obd.OBD("/dev/ttyUSB0") # create connection with USB 0
@@ -16,49 +28,56 @@ def connectOBDII():
     # print ports                    # ['/dev/ttyUSB0', '/dev/ttyUSB1']
     # connection = obd.OBD(ports[0]) # connect to the first port in the list
 
-    #--TODO Test bluetooth; only usb expected to work
+    #--TODO Test Bluetooth; only usb expected to work
 
     # Check if the connection was successful ('Not Connected', 'ELM Connected', 'OBD Connected' or 'Car Connected')
     if connection.status() == OBDStatus.CAR_CONNECTED:
         print('Successful connection to ' + connection.port_name())
-    else: # Connection unsuccessful
+    elif retry < 2: # Connection unsuccessful
+        retry += 1
         print('Connection failed, restarting ...')
         connectOBDII()
-
-
-
+    else:
+        print('Connection not available, 3 attempts failed')
 
 """ 
 Initialize OBDII adapter with AT commands; 
 """
-def initOBDII():
+# def initOBDII():
 
 
 """ 
 Continuously get data from the vehicle by issuing the corresponding PID codes.
 """
 def process():
-    getData, exitNow = True
+    global connection
+    getData = True
+
     while getData:
-        # Do stuff with data
-        x = connection.query(obd.commands.MONITOR_BOOST_PRESSURE_B1)
+        # Do stuff with data 
+        x = connection.query(obd.commands.INTAKE_PRESSURE) 
+        # x /= 6.895 # KPA to PSI
 
-        #--TODO convert monitor object to printable text
-        # https://python-obd.readthedocs.io/en/latest/Responses/#monitors-mode-06-responses
-
-        print('boostPSI: ' + x) 
+        print('boostPSI: ', x.value) 
 
         # Exit ??? How to do without keyboard in Android terminal?
-        if exitNow: # exit invoked
+        if keyboard.is_pressed('q'): # exit key invoked
+            print('Closing connection')
             connection.close()
             getData = False
+            break
 
 
 """ Main entry point """
 def main():
+    global retry
+    retry = 0
+
     connectOBDII()
     # initOBDII()
     process()
 
 
 
+if __name__ == '__main__': 
+    main() 
