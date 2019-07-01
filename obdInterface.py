@@ -1,17 +1,7 @@
 import obd, keyboard
 from obd import OBDStatus
 
-
-#--INSTALL NOTES
-# Install python-OBD    https://python-obd.readthedocs.io/
-# pip3 install obd
-# Install keyboard detection module
-# pip3 install keyboard
-
-#linux: python (2.7)
-#Macos: python3
-
-# Install Android terminal emulator + keyboard helper
+# TODO:  Install Android terminal emulator + keyboard helper
 
 global retry
 global connection
@@ -31,7 +21,7 @@ def connectOBDII():
     # print ports                    # ['/dev/ttyUSB0', '/dev/ttyUSB1']
     # connection = obd.OBD(ports[0]) # connect to the first port in the list
 
-    #--TODO Test Bluetooth; only usb expected to work
+    # TODO: Test Bluetooth + serial
 
     # Check if the connection was successful ('Not Connected', 'ELM Connected', 'OBD Connected' or 'Car Connected')
     if connection.status() == OBDStatus.CAR_CONNECTED:
@@ -65,18 +55,18 @@ def process():
     while getData:
         # Do stuff with data
         x = connection.query(obd.commands.INTAKE_PRESSURE)
-        # x /= 6.895 # Convert KPA to PSI
+        x /= 6.895 # Convert KPA to PSI
 
         print('boostPSI: ', x.value)
 
-        # TODO:
-        # Exit ??? How to do without keyboard in Android terminal?
+        # TODO: Exit upon Android volume key press?
+
+        # TODO: Exit 'q' press
         # if keyboard.is_pressed('q'): # exit key invoked
         #     print('Closing connection')
         #     connection.close()
         #     getData = False
         #     break
-
 
 """
 Main entry point
@@ -84,12 +74,9 @@ Main entry point
 def main():
     global retry
     retry = 0
-
     connectOBDII()
     # initOBDII()
     process()
-
-
 
 if __name__ == '__main__':
     main()
