@@ -1,5 +1,5 @@
 import obd, keyboard
-from obd import OBDStatus 
+from obd import OBDStatus
 
 
 #--INSTALL NOTES
@@ -8,13 +8,16 @@ from obd import OBDStatus
 # Install keyboard detection module
 # pip3 install keyboard
 
+#linux: python (2.7)
+#Macos: python3
+
 # Install Android terminal emulator + keyboard helper
 
 global retry
 global connection
 
-""" 
-Connect to the OBDII adapter through Bluetooth / usb?? 
+"""
+Connect to the OBDII adapter through Bluetooth / usb??
 """
 def connectOBDII():
     global connection
@@ -40,35 +43,44 @@ def connectOBDII():
     else:
         print('Connection not available, 3 attempts failed')
 
-""" 
-Initialize OBDII adapter with AT commands; 
+"""
+Initialize OBDII adapter with AT commands;
 """
 # def initOBDII():
 
 
-""" 
+"""
 Continuously get data from the vehicle by issuing the corresponding PID codes.
 """
 def process():
     global connection
-    getData = True
+    getData = False
+
+    # Check that a valid connection has been made before allowing data flow
+    if connection.status() != OBDStatus.CAR_CONNECTED:
+        print('Check OBDII adapter and try again')
+    else:
+        getData = True
 
     while getData:
-        # Do stuff with data 
-        x = connection.query(obd.commands.INTAKE_PRESSURE) 
-        # x /= 6.895 # KPA to PSI
+        # Do stuff with data
+        x = connection.query(obd.commands.INTAKE_PRESSURE)
+        # x /= 6.895 # Convert KPA to PSI
 
-        print('boostPSI: ', x.value) 
+        print('boostPSI: ', x.value)
 
+        # TODO:
         # Exit ??? How to do without keyboard in Android terminal?
-        if keyboard.is_pressed('q'): # exit key invoked
-            print('Closing connection')
-            connection.close()
-            getData = False
-            break
+        # if keyboard.is_pressed('q'): # exit key invoked
+        #     print('Closing connection')
+        #     connection.close()
+        #     getData = False
+        #     break
 
 
-""" Main entry point """
+"""
+Main entry point
+"""
 def main():
     global retry
     retry = 0
@@ -79,5 +91,5 @@ def main():
 
 
 
-if __name__ == '__main__': 
-    main() 
+if __name__ == '__main__':
+    main()
