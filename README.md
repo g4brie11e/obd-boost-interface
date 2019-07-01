@@ -1,5 +1,5 @@
 # OBD Boost Interface
-[In Progress]
+[Incomplete]
 
 This is a terminal based Python program which uses a OBDII port to display the formatted intake pressure of a supercharged engine.
 Inspired by seeing a friend's boost gauge extension in their Mini Cooper S, I am replicating this on an old Android smartphone.
