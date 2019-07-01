@@ -19,6 +19,9 @@ Tested on Ubuntu 18.04 + MacOS Mojave + Android 4.3
 
 ## How To Use
 [TODO]
+```
+  $ python ./obdInterface
+ ```
 
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details
