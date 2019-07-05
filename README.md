@@ -25,3 +25,5 @@ Tested on Ubuntu 18.04 + MacOS Mojave + Android 4.3
 
 ## License
 This project is licensed under the MIT License - see the LICENSE.md file for details
+
+[![HitCount](http://hits.dwyl.io/gabriellewithers/obd-boost-interface.svg)](http://hits.dwyl.io/gabriellewithers/obd-boost-interface)
