@@ -74,8 +74,10 @@ Main entry point
 def main():
     global retry
     retry = 0
+    
     connectOBDII()
     # initOBDII()
+    
     process()
 
 if __name__ == '__main__':
