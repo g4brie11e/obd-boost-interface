@@ -6,20 +6,21 @@ from obd import OBDStatus
 global retry
 global connection
 
-"""
-Connect to the OBDII adapter through Bluetooth / usb??
-"""
+
 def connectOBDII():
+    """
+    Connect to the OBDII adapter through Bluetooth / usb??
+    """
     global connection
     connection = obd.OBD() # auto connect
     global retry
 
-    # # OR
-    # connection = obd.OBD("/dev/ttyUSB0") # create connection with USB 0
-    # # OR
-    # ports = obd.scan_serial()      # return list of valid USB or RF ports
-    # print ports                    # ['/dev/ttyUSB0', '/dev/ttyUSB1']
-    # connection = obd.OBD(ports[0]) # connect to the first port in the list
+    # OR
+    connection = obd.OBD("/dev/ttyUSB0") # create connection with USB 0
+    # OR
+    ports = obd.scan_serial()      # return list of valid USB or RF ports
+    print(ports)                   # ['/dev/ttyUSB0', '/dev/ttyUSB1']
+    connection = obd.OBD(ports[0]) # connect to the first port in the list
 
     # TODO: Test Bluetooth + serial
 
@@ -33,16 +34,17 @@ def connectOBDII():
     else:
         print('Connection not available, 3 attempts failed')
 
-"""
-Initialize OBDII adapter with AT commands;
-"""
+
 # def initOBDII():
+    """
+    Initialize OBDII adapter with AT commands;
+    """
 
 
-"""
-Continuously get data from the vehicle by issuing the corresponding PID codes.
-"""
 def process():
+    """
+    Continuously get data from the vehicle by issuing the corresponding PID codes.
+    """
     global connection
     getData = False
 
@@ -57,7 +59,7 @@ def process():
         x = connection.query(obd.commands.INTAKE_PRESSURE)
         x /= 6.895 # Convert KPA to PSI
 
-        print('boostPSI: ', x.value)
+        print(f'boostPSI: {x.value}')
 
         # TODO: Exit upon Android volume key press?
 
@@ -68,10 +70,11 @@ def process():
         #     getData = False
         #     break
 
-"""
-Main entry point
-"""
+
 def main():
+    """
+    Main entry point
+    """
     global retry
     retry = 0
     
